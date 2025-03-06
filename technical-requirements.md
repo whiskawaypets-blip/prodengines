@@ -21,6 +21,11 @@
    - Time to Interactive: < 3.5s
    - Total Bundle Size: < 500KB (gzipped)
 
+4. **Port Configuration**
+   - Frontend runs on port 3000
+   - Backend API runs on port 8000
+   - Clear separation of concerns between frontend and backend
+
 ### Backend Requirements
 1. **API Performance**
    - Average Response Time: < 300ms
@@ -47,10 +52,16 @@
 2. **User Login**
    - Email/Password login via Supabase Auth
    - Google OAuth login via Supabase Auth
-   - Session management
+   - Session management via auth context provider
    - Remember me functionality
 
-3. **User Management**
+3. **Authentication Error Handling**
+   - Comprehensive error messages for all authentication failures
+   - Recovery paths for common error scenarios
+   - Diagnostic tools for troubleshooting auth issues
+   - URL parameter error detection
+
+4. **User Management**
    - Profile update via Supabase Auth
    - Password reset via Supabase Auth
    - Account deletion
@@ -115,10 +126,11 @@
 
 ### Frontend
 1. **Next.js**
-   - Version: 14.x
+   - Version: 14.x or 15.x (latest stable)
    - App Router architecture
    - Static generation for marketing pages
    - Client-side rendering for dashboard
+   - Running on port 3000
 
 2. **TypeScript**
    - Version: 5.x
@@ -126,13 +138,14 @@
    - ESLint configuration
 
 3. **Tailwind CSS**
-   - Version: 3.x
+   - Version: 3.x or 4.x (latest stable)
    - Custom theme configuration
    - Component library integration
 
 4. **Supabase Client**
    - Version: 2.x
-   - Authentication management
+   - Authentication management with enhanced error handling
+   - Auth context provider for seamless session management
    - Database access
    - Storage management
 
@@ -144,15 +157,17 @@
    - Realtime: Realtime subscriptions (when needed)
    - Edge Functions: Serverless functions for light processing
 
-2. **Lightweight FastAPI (optional)**
-   - Only for complex agent processing that can't be handled by Supabase
+2. **FastAPI Backend**
+   - For agent processing and complex operations
+   - Running on port 8000
    - Minimal dependencies
    - Stateless design
+   - Robust error handling
 
 ### DevOps
 1. **Deployment**
-   - Frontend: Vercel
-   - Backend API (if needed): Render or Heroku
+   - Frontend: Vercel (port 3000)
+   - Backend API: Render or Heroku (port 8000)
    - Database: Supabase (managed PostgreSQL)
 
 2. **CI/CD**
@@ -165,6 +180,7 @@
    - Managed by Supabase Auth
    - Row Level Security policies for database tables
    - Proper session management
+   - Protection against common auth attacks
 
 2. **Data Protection**
    - Encryption in transit (HTTPS)
@@ -203,10 +219,12 @@
 2. **Integration Testing**
    - Supabase interactions
    - Component integration testing
+   - Authentication flow testing
 
 3. **End-to-End Testing**
    - Cypress for key user flows
    - Visual regression testing
+   - Authentication workflow testing
 
 4. **Performance Testing**
    - Lighthouse for frontend performance

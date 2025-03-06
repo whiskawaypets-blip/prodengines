@@ -7,17 +7,17 @@
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                       Next.js Frontend (Vercel)                     │
+│                 Next.js Frontend (Vercel) - Port 3000               │
 │                                                                     │
 │  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌──────────┐ │
 │  │  Landing    │   │   Auth      │   │  Dashboard  │   │  Agent   │ │
 │  │   Pages     │   │   Pages     │   │   Pages     │   │  Pages   │ │
 │  └─────────────┘   └─────────────┘   └─────────────┘   └──────────┘ │
 │                                                                     │
-│  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐                │
-│  │  Supabase   │   │  Tailwind   │   │   React     │                │
-│  │   Client    │   │    CSS      │   │   Hooks     │                │
-│  └─────────────┘   └─────────────┘   └─────────────┘                │
+│  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌──────────┐ │
+│  │  Supabase   │   │  Tailwind   │   │   React     │   │ Auth     │ │
+│  │   Client    │   │    CSS      │   │   Hooks     │   │ Context  │ │
+│  └─────────────┘   └─────────────┘   └─────────────┘   └──────────┘ │
 └───────────────────────────────────┬─────────────────────────────────┘
                                     │
                                     ▼
@@ -37,8 +37,8 @@
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                   Agent Backend API (Render/Heroku)                 │
-│                   (Only for complex agent processing)               │
+│             FastAPI Backend (Render/Heroku) - Port 8000             │
+│                       (Agent Processing Logic)                      │
 │                                                                     │
 │  ┌─────────────────────────────────────────────────────────────┐    │
 │  │                     Agent Functions                         │    │
@@ -90,12 +90,51 @@
      │                   │                  │
 ```
 
+## Enhanced Authentication Error Handling Flow
+
+```
+┌──────────┐       ┌───────────┐      ┌───────────┐
+│  User    │       │  Next.js  │      │  Supabase │
+│ Browser  │       │  Frontend │      │           │
+└────┬─────┘       └─────┬─────┘      └─────┬─────┘
+     │                   │                  │
+     │  Login Request    │                  │
+     │  (Invalid)        │                  │
+     │──────────────────>│                  │
+     │                   │                  │
+     │                   │  Authentication  │
+     │                   │  Request         │
+     │                   │─────────────────>│
+     │                   │                  │
+     │                   │  Auth Error      │
+     │                   │<─────────────────│
+     │                   │                  │
+     │                   │  Check Error     │
+     │                   │  Type & Context  │
+     │                   │<─────┐           │
+     │                   │      │           │
+     │                   │──────┘           │
+     │                   │                  │
+     │  Display Error    │                  │
+     │  with Recovery    │                  │
+     │  Options          │                  │
+     │<──────────────────│                  │
+     │                   │                  │
+     │  User can retry   │                  │
+     │  or troubleshoot  │                  │
+     │<─────┐            │                  │
+     │      │            │                  │
+     │──────┘            │                  │
+     │                   │                  │
+```
+
 ## Agent Execution Flow
 
 ```
 ┌──────────┐       ┌───────────┐      ┌───────────┐     ┌────────────┐
 │  User    │       │  Next.js  │      │  Agent    │     │ External   │
 │ Browser  │       │  Frontend │      │  API      │     │ APIs       │
+│ Port 3000│       │           │      │ Port 8000 │     │            │
 └────┬─────┘       └─────┬─────┘      └─────┬─────┘     └──────┬─────┘
      │                   │                  │                  │
      │  Select Agent     │                  │                  │

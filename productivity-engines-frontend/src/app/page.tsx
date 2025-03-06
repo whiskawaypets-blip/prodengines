@@ -1,275 +1,185 @@
 'use client';
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { Hero } from "@/components/marketing/hero";
+import { About } from "@/components/marketing/about";
+import { Services } from "@/components/marketing/services";
+import { WhyNow } from "@/components/marketing/why-now";
+import { Container } from "@/components/ui/container";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getSession();
-      setIsSignedIn(!!data.session);
-    };
-    
-    checkUser();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">Productivity Engines</h1>
-              </div>
-            </div>
-            <div className="flex items-center">
-              {isSignedIn ? (
-                <Link 
-                  href="/dashboard" 
-                  className="ml-6 px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link 
-                  href="/login" 
-                  className="ml-6 px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  Login
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <>
       {/* Hero Section */}
-      <div className="relative bg-gray-50">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-              <span className="block">Replace Repetitive Tasks with</span>
-              <span className="block text-blue-600">Scalable Automation — and Grow</span>
-            </h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-              Empower your business with innovative digital solutions that boost productivity, cut costs, and fuel long-term success
-            </p>
-            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-              <div className="rounded-md shadow">
-                <a
-                  href="#"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
-                >
-                  Schedule a Free Consultation
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <Hero />
+      
       {/* About Us Section */}
-      <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">About Us</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Mission Statement
-            </p>
-          </div>
-          <div className="mt-10">
-            <p className="text-lg text-gray-500 max-w-prose mx-auto">
-              At Productivity Engines, we help Portfolio Companies and their subsidiaries achieve 
-              operational excellence through forward-thinking automation solutions and secure, 
-              private AI. Our expert team identifies and eliminates process inefficiencies, 
-              implementing scalable digital systems that drive measurable business growth — 
-              freeing your workforce to focus on innovation and success while protecting your 
-              brands and proprietary information.
-            </p>
-          </div>
-        </div>
-      </div>
-
+      <About />
+      
       {/* Services Section */}
-      <div className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Services</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Our Solutions
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              We help Portfolio Companies and their subsidiaries seize new opportunities with cutting-edge 
-              automation solutions — eliminating repetitive tasks, minimizing human error, and freeing your 
-              most talented employees to focus on innovation, growth, and delivering greater value to your customers.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
-              {/* Service 1 */}
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">Private & Secure Conversational AI</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  A private AI assistant trained exclusively on your company's SOPs, brand guidelines, 
-                  and operational documentation. Prevents data leaks by ensuring proprietary knowledge 
-                  is never shared with third-party AI LLM providers.
-                </p>
-              </div>
-
-              {/* Service 2 */}
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">Process Discovery & Opportunity Analysis</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Thorough analysis of your workflows to identify tasks that can be automated for speed, 
-                  accuracy, and scalability. Highlighting where the latest technologies can replace 
-                  outdated processes.
-                </p>
-              </div>
-
-              {/* Service 3 */}
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">Custom Automation Development</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Tailored automation solutions built to enhance your unique business processes. 
-                  Developing intelligent systems using Agentic AI, RPA, and modern digital tools 
-                  to handle time-consuming tasks with precision.
-                </p>
-              </div>
+      <Services />
+      
+      {/* Features Section - a simplified version */}
+      <section className="py-20 bg-amber-50/30 dark:bg-amber-950/5">
+        <Container>
+          <div className="text-center mb-16">
+            <div className="inline-flex rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-3 py-1 text-sm font-medium mb-4">
+              Our Features
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Why Productivity Engines */}
-      <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Why Choose Us</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Why Productivity Engines
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              Choosing Productivity Engines means partnering with experts who harness cutting-edge 
-              automation technologies, including Agentic AI, to unlock new levels of productivity, 
-              innovation, and growth for your business.
+            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl text-gray-900 dark:text-white mb-5">
+              Thoughtfully Designed for Your Business
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">
+              Our AI-powered tools help you streamline operations, gain valuable insights,
+              and focus on what matters most—growing your business.
             </p>
           </div>
-
-          <div className="mt-10">
-            <div className="space-y-6">
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900">Adaptive, Intelligent Automation</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Our Business Process Automation solutions don't just automate tasks — they learn, 
-                  adapt, and improve over time, continuously enhancing your business operations 
-                  without constant reprogramming or oversight.
-                </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            {features.map((feature) => (
+              <div key={feature.title} className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
               </div>
-              
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900">Human-in-the-Loop for Critical Decisions</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Our systems ensure that no major task is executed without human input. Rather than 
-                  employees relying on software, our solutions flip the script — automation runs the 
-                  processes and calls on your employees when their expertise is needed.
-                </p>
-              </div>
-              
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900">Scalable Solutions That Grow With You</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  From small process automations to enterprise-level workflows, our solutions are 
-                  built to scale as your business evolves, delivering long-term operational 
-                  excellence and cost savings.
-                </p>
-              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+      
+      {/* Why Now? Section */}
+      <WhyNow />
+      
+      {/* Testimonials Section */}
+      <section className="py-20 bg-white dark:bg-gray-950">
+        <Container>
+          <div className="text-center mb-16">
+            <div className="inline-flex rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-3 py-1 text-sm font-medium mb-4">
+              Success Stories
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Why Now Section */}
-      <div className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Why Now</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              The Time Is Now
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              The future of business is being redefined by intelligent automation. Companies that 
-              embrace these technologies today will gain an unparalleled competitive edge tomorrow.
+            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl text-gray-900 dark:text-white mb-5">
+              Trusted by Innovative Companies
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">
+              See how businesses like yours are achieving remarkable results with our automation solutions.
             </p>
           </div>
-
-          <div className="mt-10">
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">Secure AI Is a Must for Portfolio Companies</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Public AI models pose a risk to proprietary business knowledge. Without a private, 
-                  secure AI solution, portfolio companies and franchisors face data leaks, compliance 
-                  risks, and a lack of control over AI-generated insights.
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-amber-50/60 dark:bg-amber-900/10 p-8 rounded-lg">
+              <div className="flex flex-col h-full">
+                <p className="text-gray-600 dark:text-gray-300 italic mb-6 flex-grow">
+                  &quot;The automation solutions provided by Productivity Engines have transformed our operations. Tasks that used to take hours now happen in minutes, and our team can focus on strategic work that drives our business forward.&quot;
                 </p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">AI Innovation Is Accelerating Rapidly</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Artificial Intelligence, especially Agentic AI, is evolving at breakneck speed. 
-                  What was once experimental is now production-ready — offering SMBs unprecedented 
-                  opportunities to enhance efficiency, reduce costs, and scale operations faster than ever before.
-                </p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-medium text-gray-900">Don't Fall Behind</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Waiting to adopt automation means giving your competitors a head start. The tools 
-                  are ready, the opportunities are endless, and the time to act is now.
-                </p>
+                <div className="flex items-center mt-4">
+                  <div className="h-12 w-12 rounded-full bg-amber-200 dark:bg-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 font-medium">SR</div>
+                  <div className="ml-4">
+                    <p className="font-medium text-gray-900 dark:text-white">Sarah Reynolds</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Operations Director, TechForward</p>
+                  </div>
+                </div>
               </div>
             </div>
             
-            <div className="mt-10 text-center">
-              <a
-                href="#"
-                className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
-              >
-                Schedule a Free Consultation
-              </a>
+            <div className="bg-amber-50/60 dark:bg-amber-900/10 p-8 rounded-lg">
+              <div className="flex flex-col h-full">
+                <p className="text-gray-600 dark:text-gray-300 italic mb-6 flex-grow">
+                  &quot;Implementing the private AI assistant has been a game-changer. Our team has instant access to company knowledge while maintaining complete data security. The ROI was evident within weeks of deployment.&quot;
+                </p>
+                <div className="flex items-center mt-4">
+                  <div className="h-12 w-12 rounded-full bg-amber-200 dark:bg-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 font-medium">MJ</div>
+                  <div className="ml-4">
+                    <p className="font-medium text-gray-900 dark:text-white">Michael Johnson</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">CTO, InnovateNow Group</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-800">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="md:flex md:items-center md:justify-between">
-            <div className="flex justify-center md:order-2">
-              <p className="text-center text-base text-gray-400">
-                &copy; 2024 Productivity Engines. All rights reserved.
-              </p>
-            </div>
-            <div className="mt-8 md:mt-0 md:order-1">
-              <p className="text-center text-base text-gray-400">
-                <Link href="/login" className="text-gray-300 hover:text-white">Login</Link>
-                {' | '}
-                <Link href="#" className="text-gray-300 hover:text-white">Contact Us</Link>
-                {' | '}
-                <Link href="#" className="text-gray-300 hover:text-white">Privacy Policy</Link>
-              </p>
+        </Container>
+      </section>
+      
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-900 dark:to-orange-900">
+        <Container>
+          <div className="text-center">
+            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl text-white mb-5">
+              Ready to Transform Your Business?
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg text-white/90 mb-10">
+              The time to simplify your operations is now. Join innovative businesses that have already transformed their workflow.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-white text-amber-600 hover:bg-white/90 shadow-sm">
+                <Link href="/contact">Schedule a Free Consultation</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Link href="/services">Explore Our Services</Link>
+              </Button>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </Container>
+      </section>
+    </>
   );
 }
+
+const features = [
+  {
+    title: "AI-Powered Insights",
+    description: "Leverage advanced AI to gain valuable insights into your business operations and market position.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+    )
+  },
+  {
+    title: "Secure Data Management",
+    description: "Your data is protected with end-to-end encryption and secure infrastructure that meets industry standards.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    )
+  },
+  {
+    title: "Scalable Solutions",
+    description: "Our platform grows with your business, from startups to enterprise-level operations with seamless scaling.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    )
+  },
+  {
+    title: "Human-in-the-Loop Controls",
+    description: "Our systems ensure human input for critical decisions while automating routine tasks for maximum efficiency.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    )
+  },
+  {
+    title: "Continuous Learning",
+    description: "Our automation solutions learn and improve over time, adapting to your changing business needs.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+      </svg>
+    )
+  },
+  {
+    title: "Fast Implementation",
+    description: "Our approach of 'think big, start small, scale fast' ensures quick wins while building toward long-term success.",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    )
+  }
+];

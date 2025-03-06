@@ -7,7 +7,7 @@ productivity-engines-site/
 │       ├── ci.yml                # Continuous Integration workflow
 │       └── deploy.yml            # Deployment workflow
 │
-├── frontend/                     # Next.js Frontend
+├── productivity-engines-frontend/# Next.js Frontend (runs on port 3000)
 │   ├── public/                   # Static assets
 │   │   ├── images/               # Image assets
 │   │   └── favicon.ico           # Favicon
@@ -16,7 +16,8 @@ productivity-engines-site/
 │   │   ├── app/                  # Next.js App Router
 │   │   │   ├── (auth)/           # Authentication routes
 │   │   │   │   ├── login/        # Login page
-│   │   │   │   └── register/     # Registration page
+│   │   │   │   ├── register/     # Registration page
+│   │   │   │   └── auth-test/    # Authentication diagnostics page
 │   │   │   │
 │   │   │   ├── (dashboard)/      # Dashboard routes (authenticated)
 │   │   │   │   ├── agents/       # Agent listing and selection
@@ -36,6 +37,8 @@ productivity-engines-site/
 │   │   │
 │   │   ├── components/           # React components
 │   │   │   ├── auth/             # Authentication components
+│   │   │   │   ├── AuthForm.tsx  # Authentication form
+│   │   │   │   └── SupabaseTest.tsx # Test component for Supabase connectivity
 │   │   │   ├── common/           # Common UI components
 │   │   │   ├── dashboard/        # Dashboard components
 │   │   │   ├── agents/           # Agent-specific components
@@ -44,7 +47,8 @@ productivity-engines-site/
 │   │   ├── hooks/                # Custom React hooks
 │   │   ├── lib/                  # Utility functions and libraries
 │   │   │   ├── api.ts            # API client
-│   │   │   ├── auth.ts           # Authentication utilities
+│   │   │   ├── supabase.ts       # Supabase client configuration
+│   │   │   ├── auth-context.tsx  # Authentication context provider
 │   │   │   └── utils.ts          # General utilities
 │   │   │
 │   │   ├── models/               # TypeScript type definitions
@@ -55,16 +59,16 @@ productivity-engines-site/
 │   │   ├── styles/               # Global styles
 │   │   │   └── globals.css       # Global CSS (Tailwind imports)
 │   │   │
-│   │   └── providers/            # React context providers
-│   │       ├── auth-provider.tsx # Authentication provider
-│   │       └── theme-provider.tsx# Theme provider
+│   │   └── middleware.ts         # Next.js middleware for auth protection
 │   │
 │   ├── tailwind.config.js        # Tailwind CSS configuration
 │   ├── tsconfig.json             # TypeScript configuration
 │   ├── package.json              # Frontend dependencies
-│   └── next.config.js            # Next.js configuration
+│   ├── next.config.js            # Next.js configuration
+│   ├── .env                      # Environment variables with PORT=3000
+│   └── .env.local                # Local environment variables (Supabase credentials)
 │
-├── backend/                      # FastAPI Backend
+├── backend/                      # FastAPI Backend (runs on port 8000)
 │   ├── app/                      # Application code
 │   │   ├── api/                  # API endpoints
 │   │   │   ├── auth.py           # Authentication endpoints
@@ -109,10 +113,12 @@ productivity-engines-site/
 │   ├── requirements.txt          # Python dependencies
 │   ├── pyproject.toml            # Python project configuration
 │   ├── Dockerfile                # Backend Dockerfile
+│   ├── run.py                    # Robust run script with port conflict handling
 │   └── main.py                   # Application entry point
 │
 ├── docker-compose.yml            # Docker Compose configuration
 ├── .env.example                  # Example environment variables
 ├── README.md                     # Project README
+├── README-auth.md                # Authentication setup documentation
 └── Makefile                      # Development commands
 ``` 
