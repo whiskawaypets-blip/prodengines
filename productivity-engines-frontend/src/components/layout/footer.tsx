@@ -1,158 +1,123 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t">
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 py-12">
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Productivity Engines
-              </span>
-            </Link>
-            <p className="text-sm text-muted-foreground">
-              Unlock your business potential with AI-powered productivity solutions.
-            </p>
+        <div className="py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
+                Company
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/about" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/team" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Team
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/careers" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Careers
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
+                Services
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/services/ai" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Conversational AI
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/services/automation" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Process Automation
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/services/integration" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    System Integration
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
+                Resources
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/blog" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/case-studies" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Case Studies
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/resources" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    Documentation
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
+                Contact
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="mailto:info@productivityengines.com" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    info@productivityengines.com
+                  </Link>
+                </li>
+                <li>
+                  <Link href="tel:+18005551234" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">
+                    (800) 555-1234
+                  </Link>
+                </li>
+                <li>
+                  <address className="text-gray-600 dark:text-gray-400 text-sm not-italic">
+                    123 Innovation Way<br />
+                    San Francisco, CA 94103
+                  </address>
+                </li>
+              </ul>
+            </div>
           </div>
-          <nav className="space-y-4">
-            <h4 className="text-sm font-semibold">Platform</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/agents/marketing"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Marketing Research
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/agents/conversational"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Conversational AI
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/agents/process"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Process Analysis
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <nav className="space-y-4">
-            <h4 className="text-sm font-semibold">Company</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <nav className="space-y-4">
-            <h4 className="text-sm font-semibold">Legal</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </nav>
         </div>
-        <div className="flex flex-col sm:flex-row justify-between items-center py-6 border-t">
-          <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Productivity Engines. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <Link
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-              </svg>
-              <span className="sr-only">Twitter</span>
-            </Link>
-            <Link
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                <rect x="2" y="9" width="4" height="12"></rect>
-                <circle cx="4" cy="4" r="2"></circle>
-              </svg>
-              <span className="sr-only">LinkedIn</span>
-            </Link>
+        
+        <div className="py-6 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              © {new Date().getFullYear()} Productivity Engines, Inc. All rights reserved.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <Link href="/privacy" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                Privacy
+              </Link>
+              <Link href="/terms" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                Terms
+              </Link>
+              <Link href="/sitemap" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                Sitemap
+              </Link>
+            </div>
           </div>
         </div>
       </Container>
