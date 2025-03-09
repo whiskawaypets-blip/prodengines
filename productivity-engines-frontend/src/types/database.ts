@@ -11,6 +11,10 @@ export type Database = {
           ui_config: Record<string, unknown>
           created_at: string
           updated_at: string
+          categories: string[]
+          is_public: boolean
+          creator_id: string | null
+          icon: string | null
         }
         Insert: {
           id?: string
@@ -21,6 +25,10 @@ export type Database = {
           ui_config: Record<string, unknown>
           created_at?: string
           updated_at?: string
+          categories?: string[]
+          is_public?: boolean
+          creator_id?: string | null
+          icon?: string | null
         }
         Update: {
           id?: string
@@ -31,6 +39,10 @@ export type Database = {
           ui_config?: Record<string, unknown>
           created_at?: string
           updated_at?: string
+          categories?: string[]
+          is_public?: boolean
+          creator_id?: string | null
+          icon?: string | null
         }
       }
       agent_results: {
@@ -65,6 +77,46 @@ export type Database = {
           created_at?: string
         }
       }
+      user_roles: {
+        Row: {
+          id: string
+          user_id: string
+          role: 'admin' | 'user'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          role: 'admin' | 'user'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          role?: 'admin' | 'user'
+          created_at?: string
+        }
+      }
+      agent_categories: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -76,4 +128,4 @@ export type Database = {
       [_ in never]: never
     }
   }
-} 
+}
