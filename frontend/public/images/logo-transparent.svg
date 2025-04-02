@@ -1,0 +1,9 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- P shape - dark gray outline with better proportions -->
+  <path d="M6 6H20C27 6 34 13 34 20C34 27 27 34 20 34H6V6Z" stroke="#333333" stroke-width="3" fill="none"/>
+  
+  <!-- E shape - horizontal lines in lighter gray with better spacing -->
+  <rect x="22" y="10" width="12" height="3" fill="#808080"/>
+  <rect x="22" y="18.5" width="12" height="3" fill="#808080"/>
+  <rect x="22" y="27" width="12" height="3" fill="#808080"/>
+</svg>

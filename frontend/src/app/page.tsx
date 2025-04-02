@@ -1,24 +1,26 @@
 'use client';
 
 import { Hero } from "@/components/marketing/hero";
-import { About } from "@/components/marketing/about";
-import { Services } from "@/components/marketing/services";
-import { WhyNow } from "@/components/marketing/why-now";
+// import { About } from "@/components/marketing/about"; // Removed
+// import { Services } from "@/components/marketing/services"; // Removed
+// import { WhyNow } from "@/components/marketing/why-now"; // Removed
 import { Container } from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { ContactForm } from '@/components/marketing/ContactForm';
+// import { Button } from "@/components/ui/button"; // Removed as unused
+// import Link from "next/link"; // Removed as unused
 
 export default function Home() {
+  const formspreeUrl = "https://formspree.io/f/mblgzodz";
   return (
     <>
       {/* Hero Section */}
       <Hero />
       
-      {/* About Us Section */}
-      <About />
+      {/* About Us Section - Removed */}
+      {/* <About /> */}
       
-      {/* Services Section */}
-      <Services />
+      {/* Services Section - Removed */}
+      {/* <Services /> */}
       
       {/* Features Section - a simplified version */}
       <section className="py-20 bg-amber-50/30 dark:bg-amber-950/5">
@@ -50,8 +52,8 @@ export default function Home() {
         </Container>
       </section>
       
-      {/* Why Now? Section */}
-      <WhyNow />
+      {/* Why Now? Section - Removed */}
+      {/* <WhyNow /> */}
       
       {/* Testimonials Section */}
       <section className="py-20 bg-white dark:bg-gray-950">
@@ -102,23 +104,19 @@ export default function Home() {
         </Container>
       </section>
       
-      {/* CTA Section */}
+      {/* CTA Section - To be replaced with Contact Form */}
       <section className="py-20 bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-900 dark:to-orange-900">
         <Container>
           <div className="text-center">
             <h2 className="text-3xl font-medium tracking-tight sm:text-4xl text-white mb-5">
-              Ready to Transform Your Business?
+              Contact Us
             </h2>
             <p className="max-w-2xl mx-auto text-lg text-white/90 mb-10">
-              The time to simplify your operations is now. Join innovative businesses that have already transformed their workflow.
+              Have questions or want to discuss a project? Send us a message!
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-white text-amber-600 hover:bg-white/90 shadow-sm">
-                <Link href="/contact">Schedule a Free Consultation</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                <Link href="/services">Explore Our Services</Link>
-              </Button>
+            <div className="mt-8 max-w-md mx-auto">
+              <ContactForm formspreeUrl={formspreeUrl} />
+              <p className="text-white/70 text-sm mt-4">We&apos;ll get back to you shortly.</p>
             </div>
           </div>
         </Container>

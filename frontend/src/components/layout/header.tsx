@@ -10,6 +10,8 @@ import { User } from "@supabase/supabase-js";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Logo } from "@/components/ui/logo";
+import { MobileMenu } from "@/components/ui/mobile-menu";
 
 export function Header() {
   const { user, isLoading, signOut, isConfigured } = useAuth();
@@ -27,7 +29,7 @@ export function Header() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${window.location.origin}/dashboard-direct`,
         },
       });
       
@@ -58,50 +60,9 @@ export function Header() {
     <header className="fixed top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm">
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="text-xl font-light tracking-tight text-gray-900 dark:text-white">
-            <span className="font-normal">Productivity</span> Engines
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/about" 
-              className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
-            >
-              About
-            </Link>
-            <Link 
-              href="/services" 
-              className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
-            >
-              Services
-            </Link>
-            <Link 
-              href="/why-now" 
-              className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
-            >
-              Why Now
-            </Link>
-            <Link 
-              href="/case-studies" 
-              className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
-            >
-              Case Studies
-            </Link>
-            <Link 
-              href="/dashboard-direct" 
-              className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
-            >
-              Agents Library
-            </Link>
-          </nav>
+          <Logo />
           
           <div className="flex items-center space-x-4">
-            <Link href="/contact" className="hidden md:block">
-              <Button variant="outline" size="sm" className="border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                Contact
-              </Button>
-            </Link>
-            
             {isLoading ? (
               <Skeleton className="h-9 w-24 rounded-md" />
             ) : user ? (
@@ -117,23 +78,23 @@ export function Header() {
                 </PopoverTrigger>
                 <PopoverContent className="w-56 p-0" align="end">
                   <div className="p-2 border-b">
-                    <p className="text-sm font-medium">{user.email}</p>
+                    <p className="text-sm font-medium truncate">{user.email}</p>
                     <p className="text-xs text-gray-500">Logged in with Google</p>
                   </div>
                   <div className="p-2">
+                    <Link href="/dashboard">
+                      <Button variant="ghost" size="sm" className="w-full justify-start text-left">
+                        Dashboard
+                      </Button>
+                    </Link>
                     <Link href="/dashboard-direct">
                       <Button variant="ghost" size="sm" className="w-full justify-start text-left">
                         Agents Library
                       </Button>
                     </Link>
-                    <Link href="/auth-debug">
+                    <Link href="/dashboard/subscription">
                       <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                        Auth Debug
-                      </Button>
-                    </Link>
-                    <Link href="/profile">
-                      <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                        Profile Settings
+                        Subscription
                       </Button>
                     </Link>
                     <Button 
@@ -158,7 +119,7 @@ export function Header() {
                   <>Loading...</>
                 ) : (
                   <>
-                    <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
                       <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
                         <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
                         <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/>
@@ -166,30 +127,14 @@ export function Header() {
                         <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
                       </g>
                     </svg>
-                    Login with Google
+                    <span className="hidden sm:inline">Login with Google</span>
+                    <span className="sm:hidden">Login</span>
                   </>
                 )}
               </Button>
             )}
             
-            <Button variant="ghost" size="icon" className="md:hidden text-gray-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-              </svg>
-              <span className="sr-only">Menu</span>
-            </Button>
+            <MobileMenu />
           </div>
         </div>
       </Container>
