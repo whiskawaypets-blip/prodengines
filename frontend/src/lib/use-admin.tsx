@@ -30,7 +30,7 @@ export function useAdmin(): UseAdminResult {
         // Special case for guymaxphelps@gmail.com - always check and set as admin
         if (user.email === 'guymaxphelps@gmail.com') {
           // Try to get the admin role
-          const { data: adminData, error: adminError } = await supabase
+          const { data: adminData } = await supabase
             .from('user_roles')
             .select('role')
             .eq('user_id', user.id)
