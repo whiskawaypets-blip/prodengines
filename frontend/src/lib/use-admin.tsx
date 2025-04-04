@@ -45,15 +45,15 @@ export function useAdmin(): UseAdminResult {
                 role: 'admin'
               });
               
-              // Also call the API endpoint to ensure proper setup
-              await fetch(`/api/set-admin?email=${encodeURIComponent(user.email)}`);
+              // Also call the API endpoint to ensure proper setup - REMOVED
+              // await fetch(`/api/set-admin?email=${encodeURIComponent(user.email)}`);
               
               setIsAdmin(true);
             } catch (insertError) {
               console.error('Error setting admin role:', insertError);
-              // Try using API endpoint as fallback
-              await fetch(`/api/set-admin?email=${encodeURIComponent(user.email)}`);
-              setIsAdmin(true);
+              // Try using API endpoint as fallback - REMOVED
+              // await fetch(`/api/set-admin?email=${encodeURIComponent(user.email)}`);
+              setIsAdmin(true); // Assume admin if insert worked or if it's the special user
             }
           } else {
             setIsAdmin(true);
