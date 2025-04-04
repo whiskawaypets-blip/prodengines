@@ -5,43 +5,63 @@ import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { AuthError, Session, User } from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
+
+// Define a type for the debug information structure
+interface DebugInfo {
+  clientSession?: { data: { session: Session | null; }; error: AuthError | null; } | null;
+  testQuery?: { data: User[] | null, error: PostgrestError | null };
+  contextInfo?: {
+    isUser: boolean;
+    userEmail?: string;
+    isSession: boolean;
+    isLoading: boolean;
+    error: AuthError | Error | string | null;
+    isConfigured: boolean;
+  };
+  error?: unknown;
+}
 
 export default function AuthDebugPage() {
   const router = useRouter();
-  const { user, session, isLoading, error, isConfigured } = useAuth();
-  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const { user, session, isLoading, error: authContextError, isConfigured } = useAuth();
+  const [debugInfo, setDebugInfo] = useState<DebugInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const getDebugInfo = async () => {
+      let info: DebugInfo = {};
       try {
         // Get session info
-        const { data: sessionData } = await supabase.auth.getSession();
+        const sessionInfo = await supabase.auth.getSession();
         
         // Test supabase connection
         const { data: testData, error: testError } = await supabase.from('auth.users').select('*').limit(1);
         
-        setDebugInfo({
-          clientSession: sessionData,
+        info = {
+          clientSession: sessionInfo,
           testQuery: { data: testData, error: testError },
           contextInfo: {
             isUser: !!user,
             userEmail: user?.email,
             isSession: !!session,
             isLoading,
-            error,
+            error: authContextError,
             isConfigured
           }
-        });
-      } catch (err) {
+        };
+      } catch (err: unknown) {
         console.error('Error fetching debug info:', err);
-        setDebugInfo({ error: err });
+        info.error = err;
+      } finally {
+        setDebugInfo(info);
       }
     };
     
     getDebugInfo();
-  }, [user, session, isLoading, error, isConfigured]);
+  }, [user, session, isLoading, authContextError, isConfigured]);
   
   const hardResetSession = async () => {
     setLoading(true);
@@ -120,7 +140,7 @@ export default function AuthDebugPage() {
             <div>{isLoading ? '⏳ Yes' : '✅ No'}</div>
             
             <div className="font-medium">Error:</div>
-            <div>{error || 'None'}</div>
+            <div>{authContextError || 'None'}</div>
             
             <div className="font-medium">Supabase Configured:</div>
             <div>{isConfigured ? '✅ Yes' : '❌ No'}</div>

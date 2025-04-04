@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation'; // Removed unused import
 import Link from 'next/link';
 
 export default function MarketingAgentPage() {
-  const router = useRouter();
+  // const router = useRouter(); // Removed unused variable
   const [businessName, setBusinessName] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,8 +37,12 @@ export default function MarketingAgentPage() {
 
       const data = await response.json();
       setResult(data.analysis);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while processing your request.');
+    } catch (err: unknown) { // Changed type from any to unknown
+      let errorMessage = 'An error occurred while processing your request.';
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

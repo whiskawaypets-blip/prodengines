@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     const agentData = await agentResponse.json();
     
     // Log the result to Supabase
-    await supabase.from('agent_results').insert({
+    const { error: logError } = await supabase.from('agent_results').insert({
       user_id: session.session.user.id,
       agent_id: 'marketing-research', // This should be an actual ID from the agent_configs table
       input: {
@@ -65,17 +65,24 @@ export async function POST(request: Request) {
       },
       status: 'completed',
       execution_time: 0, // Would be calculated from start/end time in a real implementation
-    }).catch(err => {
-      // Log error but don't fail the request
-      console.error('Error saving result to Supabase:', err);
     });
+    
+    // Log error but don't fail the request
+    if (logError) {
+        console.error('Error saving result to Supabase:', logError);
+    }
 
     return NextResponse.json(agentData);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error processing agent request:', error);
     
+    let errorMessage = 'An unexpected error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

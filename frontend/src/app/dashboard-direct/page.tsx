@@ -8,12 +8,13 @@ import { AgentCard } from '@/components/dashboard/agent-card';
 import { CategoryFilter } from '@/components/dashboard/category-filter';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { Database } from '@/types/database';
+import { User } from '@supabase/supabase-js';
 
 type AgentConfig = Database['public']['Tables']['agent_configs']['Row'];
 
 export default function DashboardDirectPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   
