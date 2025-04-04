@@ -87,8 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             case 'SIGNED_OUT':
               setSession(null);
               setUser(null);
-              // Redirect to home page or login page when signed out
-              router.push('/login');
+              // Redirect to home page instead of login page when signed out
+              router.push('/');
               break;
               
             case 'TOKEN_REFRESHED':

@@ -82,21 +82,17 @@ export function Header() {
                     <p className="text-xs text-gray-500">Logged in with Google</p>
                   </div>
                   <div className="p-2">
-                    <Link href="/dashboard">
-                      <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                        Dashboard
-                      </Button>
-                    </Link>
                     <Link href="/dashboard-direct">
                       <Button variant="ghost" size="sm" className="w-full justify-start text-left">
                         Agents Library
                       </Button>
                     </Link>
-                    <Link href="/dashboard/subscription">
+                    {/* Commented out Subscription link for now */}
+                    {/* <Link href="/dashboard/subscription">
                       <Button variant="ghost" size="sm" className="w-full justify-start text-left">
                         Subscription
                       </Button>
-                    </Link>
+                    </Link> */}
                     <Button 
                       variant="ghost" 
                       size="sm" 
@@ -110,6 +106,7 @@ export function Header() {
               </Popover>
             ) : (
               <Button 
+                id="google-login-button"
                 size="sm" 
                 className="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 rounded-md flex items-center gap-2"
                 onClick={handleGoogleLogin}

@@ -22,10 +22,10 @@ export async function middleware(req: NextRequest) {
     );
     
     // Auth routes that should redirect to dashboard if already logged in
-    const authRoutes = ['/login', '/signup'];
-    const isAuthRoute = authRoutes.some(route => 
-      pathname === route || pathname.startsWith(`${route}/`)
-    );
+    // const authRoutes = ['/login', '/signup']; // REMOVED login page reference
+    // const isAuthRoute = authRoutes.some(route => 
+    //   pathname === route || pathname.startsWith(`${route}/`)
+    // );
     
     // If the user is not logged in and trying to access a protected route, redirect to login
     if (isProtectedRoute && !session) {
@@ -35,11 +35,12 @@ export async function middleware(req: NextRequest) {
     }
     
     // If the user is logged in and trying to access an auth route, redirect to dashboard
-    if (isAuthRoute && session) {
+    // REMOVED - login page no longer exists
+    /* if (isAuthRoute && session) {
       console.log('Middleware: User authenticated, redirecting to dashboard');
       const redirectUrl = new URL('/dashboard', req.url);
       return NextResponse.redirect(redirectUrl);
-    }
+    } */
   } catch (error) {
     console.error('Middleware error:', error);
     // If there's an error, just continue without auth checks

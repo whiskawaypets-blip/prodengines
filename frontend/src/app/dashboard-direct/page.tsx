@@ -9,6 +9,7 @@ import { CategoryFilter } from '@/components/dashboard/category-filter';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { Database } from '@/types/database';
 import { User } from '@supabase/supabase-js';
+import { Skeleton } from "@/components/ui/skeleton";
 
 type AgentConfig = Database['public']['Tables']['agent_configs']['Row'];
 
@@ -133,8 +134,20 @@ export default function DashboardDirectPage() {
         setCategories(allCategories);
         setSelectedCategories(allCategories);
       } catch (err) {
-        console.error('Error fetching agents:', err);
-        setAgentsError('Failed to load agents. Please try again.');
+        console.error('Raw error fetching agents:', err); // Log the raw error
+        let errorMessage = 'Failed to load agents. Please try again.';
+        if (err instanceof Error) {
+            errorMessage = err.message;
+        } else if (typeof err === 'string') {
+            errorMessage = err;
+        } else if (typeof err === 'object' && err !== null && 'message' in err) {
+             // Handle Supabase specific error structure if needed
+            errorMessage = (err as { message?: string }).message || JSON.stringify(err);
+        } else {
+            errorMessage = JSON.stringify(err); // Fallback to stringify
+        }
+        console.error('Processed error message:', errorMessage); // Log processed message
+        setAgentsError(errorMessage);
       } finally {
         setIsAgentsLoading(false);
       }
@@ -156,41 +169,50 @@ export default function DashboardDirectPage() {
     return categoryMatch && searchMatch;
   });
 
+  // Main Loading State (Session Check)
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg">Loading dashboard...</p>
+      <div className="min-h-screen flex items-center justify-center pt-20">
+        <div className="space-y-4 w-full max-w-md">
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-6 w-1/2" />
+            <Skeleton className="h-20 w-full" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="pb-5 border-b border-gray-200 dark:border-gray-700 sm:flex sm:items-center sm:justify-between">
+        <div className="pb-5 border-b border-gray-200 dark:border-gray-700 sm:flex sm:items-center sm:justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Agents Library
           </h1>
           
-          <div className="flex items-center space-x-4">
+          <div className="mt-3 sm:mt-0 flex items-center space-x-4">
             {user ? (
               <>
                 {isAdmin && (
                   <button
                     onClick={() => setShowAdminPanel(!showAdminPanel)}
-                    className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
+                    className="px-3 py-1.5 text-sm bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors duration-150"
                   >
-                    {showAdminPanel ? 'Hide Admin Panel' : 'Show Admin Panel'}
+                    {showAdminPanel ? 'Hide Admin Panel' : 'Add New Agent'}
                   </button>
                 )}
-                <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded">
-                  Signed in as {user.email?.split('@')[0]}
+                <div className="px-3 py-1.5 text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded">
+                  Logged in: {user.email?.split('@')[0]}
                 </div>
               </>
             ) : (
               <Link 
-                href="/login"
-                className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
+                href="#"
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('google-login-button')?.click();
+                }}
+                className="px-3 py-1.5 text-sm bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors duration-150"
               >
                 Sign In
               </Link>
@@ -198,108 +220,70 @@ export default function DashboardDirectPage() {
             
             <Link 
               href="/"
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+              className="px-3 py-1.5 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-150"
             >
-              Home
+              Back to Home
             </Link>
           </div>
         </div>
-        
+
         {isAdmin && showAdminPanel && (
-          <div className="mt-6">
+          <div className="mb-8">
             <AdminPanel />
           </div>
         )}
-        
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-            Agent Library
-          </h2>
-          
-          {agentsError && (
-            <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
-              {agentsError}
-            </div>
-          )}
-          
-          <div className="mb-6">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg 
-                  className="h-5 w-5 text-gray-400" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 20 20" 
-                  fill="currentColor" 
-                >
-                  <path 
-                    fillRule="evenodd" 
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" 
-                    clipRule="evenodd" 
-                  />
-                </svg>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-1">
+            <div className="sticky top-24">
+              <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Filters</h2>
+              <div className="mb-6">
+                <label htmlFor="search" className="sr-only">Search Agents</label>
+                <input
+                  type="search"
+                  id="search"
+                  placeholder="Search agents..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
+                />
               </div>
-              <input
-                type="text"
-                placeholder="Search agents..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              <CategoryFilter 
+                categories={categories} 
+                selectedCategories={selectedCategories} 
+                onChange={setSelectedCategories} 
               />
             </div>
           </div>
-          
-          {categories.length > 0 && (
-            <CategoryFilter
-              categories={categories}
-              selectedCategories={selectedCategories}
-              onChange={setSelectedCategories}
-            />
-          )}
-          
-          {isAgentsLoading ? (
-            <div className="py-12 flex justify-center">
-              <svg 
-                className="animate-spin h-8 w-8 text-amber-500" 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24"
-              >
-                <circle 
-                  className="opacity-25" 
-                  cx="12" 
-                  cy="12" 
-                  r="10" 
-                  stroke="currentColor" 
-                  strokeWidth="4"
-                ></circle>
-                <path 
-                  className="opacity-75" 
-                  fill="currentColor" 
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <span className="ml-3 text-lg text-gray-600 dark:text-gray-300">Loading agents...</span>
-            </div>
-          ) : filteredAgents.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredAgents.map((agent) => (
-                <AgentCard key={agent.id} agent={agent} />
-              ))}
-            </div>
-          ) : (
-            <div className="py-12 text-center">
-              <p className="text-xl text-gray-600 dark:text-gray-300">No agents found</p>
-              
-              {isAdmin && (
-                <button
-                  onClick={() => setShowAdminPanel(true)}
-                  className="mt-4 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
-                >
-                  Add Your First Agent
-                </button>
-              )}
-            </div>
-          )}
+
+          <div className="md:col-span-3">
+            {isAgentsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 space-y-3">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-8 w-1/3 ml-auto" />
+                  </div>
+                ))}
+              </div>
+            ) : agentsError ? (
+              <div className="flex items-center justify-center h-64 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                <p className="text-red-700 dark:text-red-300">{agentsError}</p>
+              </div>
+            ) : filteredAgents.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredAgents.map((agent) => (
+                  <AgentCard key={agent.id} agent={agent} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-64 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md">
+                <p className="text-gray-500 dark:text-gray-400">No agents found matching your criteria.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
