@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link'; // Removed as unused
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -31,48 +31,18 @@ export function MobileMenu() {
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
         <nav className="flex flex-col gap-4 mt-8">
+          {/* Removed obsolete links. Add back essential mobile navigation if needed. */}
+          {/* Example: Maybe a link back to home? 
           <Link 
-            href="/about" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
+            href="/" 
+            className="text-lg font-medium ..."
             onClick={() => setOpen(false)}
           >
-            About
+            Home
           </Link>
-          <Link 
-            href="/services" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
-            onClick={() => setOpen(false)}
-          >
-            Services
-          </Link>
-          <Link 
-            href="/why-now" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
-            onClick={() => setOpen(false)}
-          >
-            Why Now
-          </Link>
-          <Link 
-            href="/case-studies" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
-            onClick={() => setOpen(false)}
-          >
-            Case Studies
-          </Link>
-          <Link 
-            href="/dashboard" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
-            onClick={() => setOpen(false)}
-          >
-            Dashboard
-          </Link>
-          <Link 
-            href="/contact" 
-            className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors p-2"
-            onClick={() => setOpen(false)}
-          >
-            Contact
-          </Link>
+          */}
+          {/* Consider what, if anything, is needed here now the site is single-page */}
+          {/* The user popover handles Dashboard/Agents Library post-login */}
         </nav>
       </SheetContent>
     </Sheet>
