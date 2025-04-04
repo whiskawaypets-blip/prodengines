@@ -75,12 +75,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               setUser(newSession?.user ?? null);
               setIsLoading(false);
               
-              // Redirect to dashboard on successful sign in
-              if (newSession?.user) {
+              // Redirect to dashboard on successful sign in - REMOVED
+              // The redirect should be handled by the redirectTo option in signInWithOAuth
+              /* if (newSession?.user) {
                 console.log('User signed in - redirecting to dashboard');
                 // Add small delay to allow state updates to propagate
                 setTimeout(() => router.push('/dashboard'), 300);
-              }
+              } */
               break;
               
             case 'SIGNED_OUT':
