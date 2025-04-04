@@ -104,13 +104,13 @@ export default function DashboardDirectPage() {
       try {
         setIsAgentsLoading(true);
         
-        // Initialize database if needed
-        try {
+        // Initialize database if needed - REMOVED for production build
+        /* try {
           await fetch('/api/init-db');
         } catch (err) {
           console.error('Database init error:', err);
           // Non-critical, continue anyway
-        }
+        } */
         
         // Fetch public agents
         const { data, error } = await supabase
