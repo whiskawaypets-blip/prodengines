@@ -20,6 +20,14 @@ export const metadata: Metadata = {
   title: "Productivity Engines - Replace Repetitive Tasks with Scalable Automation",
   description: "Empower your business with innovative digital solutions that boost productivity, cut costs, and fuel long-term success",
   keywords: "automation, productivity, ai, digital transformation, business process",
+  icons: {
+    icon: [
+      { url: '/images/logo-transparent.svg', type: 'image/svg+xml' },
+      { url: '/images/logo.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({
