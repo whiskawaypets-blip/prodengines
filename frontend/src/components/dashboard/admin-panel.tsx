@@ -143,7 +143,7 @@ export function AdminPanel() {
       }
       
       // Create the agent config
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('agent_configs')
         .insert({
           name: formData.name.trim(),
