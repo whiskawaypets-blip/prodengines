@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { Database } from '@/types/database';
-import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
 
 type AgentConfig = Database['public']['Tables']['agent_configs']['Row'];
 
@@ -12,79 +12,99 @@ interface AgentCardProps {
   agent: AgentConfig;
 }
 
-const defaultIcons = {
-  marketing: (
-    <svg className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-    </svg>
-  ),
-  sales: (
-    <svg className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  hr: (
-    <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-    </svg>
-  ),
-  admin: (
-    <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  ),
-  general: (
-    <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-    </svg>
-  ),
-};
-
-function getCategoryIcon(category: string) {
-  const normalizedCategory = category.toLowerCase();
-  
-  if (normalizedCategory.includes('market')) return defaultIcons.marketing;
-  if (normalizedCategory.includes('sales')) return defaultIcons.sales;
-  if (normalizedCategory.includes('hr') || normalizedCategory.includes('human')) return defaultIcons.hr;
-  if (normalizedCategory.includes('admin')) return defaultIcons.admin;
-  
-  return defaultIcons.general;
-}
-
 export function AgentCard({ agent }: AgentCardProps) {
-  const primaryCategory = agent.categories?.[0] || 'general';
-  const { user } = useAuth();
-  const router = useRouter();
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
-  const handleAgentClick = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      setShowLoginPrompt(true);
+  // Extract config properties safely
+  const config = agent.config as Record<string, unknown> | null;
+  const externalUrl = config?.externalUrl as string | undefined;
+  const authType = config?.authType as string | undefined;
+  const tokenParam = config?.tokenParam as string | undefined;
+
+  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Handle external agents with JWT query param auth
+    if (externalUrl && authType === 'jwt_query_param' && tokenParam) {
+      e.preventDefault(); // Prevent default link navigation
+      setIsNavigating(true);
+      setError(null);
+
+      try {
+        // Get current session
+        const { data, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          throw new Error(`Authentication error: ${sessionError.message}`);
+        }
+
+        if (!data.session) {
+          // If no session, maybe prompt user to log in or handle differently?
+          // For now, redirect to the external URL without a token, 
+          // assuming the external app handles unauthenticated users.
+          console.warn('No active session found. Navigating without token.');
+          window.open(externalUrl, '_blank');
+          // Alternatively, redirect to login:
+          // router.push('/'); // Redirect to home which might trigger login via header
+          // setError('Please sign in to use this agent.'); 
+          return; 
+        }
+
+        const jwt = data.session.access_token;
+        const urlWithToken = `${externalUrl}?${encodeURIComponent(tokenParam)}=${encodeURIComponent(jwt)}`;
+        
+        console.log(`Navigating to external agent with token: ${urlWithToken}`);
+        window.open(urlWithToken, '_blank', 'noopener,noreferrer');
+
+      } catch (err) {
+        console.error('Error preparing external agent navigation:', err);
+        setError(err instanceof Error ? err.message : 'Failed to get authentication token.');
+      } finally {
+        setIsNavigating(false);
+      }
+    } else {
+      // Default behavior for internal agents (assuming path is based on type)
+      // Or external agents without special auth handled by simple Link href
+      // (The Link component below handles this case)
     }
   };
-  
-  const handleLogin = () => {
-    router.push('/login');
-  };
-  
+
+  // Determine the href for the Link component
+  // Internal agents use /dashboard/:type, external without special auth use externalUrl
+  const href = (externalUrl && authType !== 'jwt_query_param') 
+               ? externalUrl 
+               : `/dashboard/${agent.type}`;
+
+  // Target for the Link component
+  const target = (externalUrl && authType !== 'jwt_query_param') ? '_blank' : '_self';
+
   return (
-    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200 relative">
-      <div className="p-5">
-        <div className="flex items-start">
-          <div className="flex-shrink-0">
-            {agent.icon ? (
-              <img src={agent.icon} alt={agent.name} className="h-8 w-8" />
+    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md">
+      <div className={`block p-5 ${isNavigating ? 'opacity-70 cursor-not-allowed' : ''}`}>
+        <div className="flex items-start space-x-4">
+          <div className="flex-shrink-0 w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center overflow-hidden">
+            {agent.icon && agent.icon.startsWith('/') ? (
+              <Image 
+                src={agent.icon} 
+                alt={`${agent.name} icon`}
+                width={32}
+                height={32}
+                className="object-contain"
+              />
+            ) : agent.icon ? (
+              <span className="text-2xl" role="img" aria-label={`${agent.name} icon`}>{agent.icon}</span>
             ) : (
-              getCategoryIcon(primaryCategory)
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+              </svg>
             )}
           </div>
-          <div className="ml-4">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{agent.name}</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              {agent.description || `A ${primaryCategory} agent for productivity enhancement.`}
+          
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate" title={agent.name}>
+              {agent.name}
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2" title={agent.description || ''}>
+              {agent.description || 'No description available.'}
             </p>
           </div>
         </div>
@@ -102,50 +122,25 @@ export function AgentCard({ agent }: AgentCardProps) {
           </div>
         )}
         
-        <div className="mt-4">
-          {user ? (
-            <Link 
-              href={`/dashboard/${agent.type}`}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-            >
-              Use Agent
-            </Link>
-          ) : (
-            <button
-              onClick={handleAgentClick}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-            >
-              Use Agent
-            </button>
-          )}
+        <div className="mt-4 flex justify-end">
+          <Link 
+            href={href} 
+            target={target}
+            rel={target === '_blank' ? "noopener noreferrer" : undefined}
+            onClick={handleClick} 
+            className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 ${isNavigating ? 'opacity-70 cursor-wait' : ''} ${!externalUrl && authType !== 'jwt_query_param' ? '' : ''} `}
+            aria-disabled={isNavigating}
+          >
+            {isNavigating ? 'Loading...' : (externalUrl ? 'Open Agent' : 'Use Agent')} 
+          </Link>
         </div>
       </div>
       
-      {/* Login Prompt Overlay */}
-      {showLoginPrompt && (
-        <div className="absolute inset-0 bg-gray-900/80 flex items-center justify-center backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-xs w-full">
-            <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Sign In Required</h4>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              You need to sign in to use this agent. Create a free account or sign in to continue.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={handleLogin}
-                className="flex-1 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setShowLoginPrompt(false)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {error && (
+         <div className="px-5 pb-3 text-xs text-red-600 dark:text-red-400">
+             Error: {error}
+         </div>
+       )}
     </div>
   );
 }

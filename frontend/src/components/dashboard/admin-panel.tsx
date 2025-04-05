@@ -14,6 +14,7 @@ interface NewAgentFormData {
   categories: string[];
   is_public: boolean;
   icon?: string;
+  config?: Record<string, unknown>;
 }
 
 export function AdminPanel() {
@@ -24,8 +25,11 @@ export function AdminPanel() {
     type: '',
     categories: [],
     is_public: true,
-    icon: ''
+    icon: '',
+    config: {}
   });
+  const [configInput, setConfigInput] = useState<string>('{}');
+  const [isConfigJsonValid, setIsConfigJsonValid] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -35,6 +39,8 @@ export function AdminPanel() {
 
   useEffect(() => {
     fetchCategories();
+    setConfigInput(JSON.stringify(formData.config || {}, null, 2));
+    setIsConfigJsonValid(true);
   }, []);
 
   const fetchCategories = async () => {
@@ -57,10 +63,23 @@ export function AdminPanel() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+
+    if (name === 'config') {
+      setConfigInput(value);
+      try {
+        const parsedConfig = JSON.parse(value);
+        setFormData(prev => ({ ...prev, config: parsedConfig }));
+        setIsConfigJsonValid(true);
+      } catch {
+        setIsConfigJsonValid(false);
+        console.warn("Invalid JSON in config input");
+      }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,6 +143,12 @@ export function AdminPanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isConfigJsonValid) {
+      setError('Agent Config JSON is invalid. Please correct it.');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
@@ -153,7 +178,7 @@ export function AdminPanel() {
           is_public: formData.is_public,
           creator_id: user?.id,
           icon: formData.icon?.trim() || null,
-          config: {}, // Default empty config
+          config: formData.config,
           ui_config: {} // Default empty UI config
         })
         .select('*')
@@ -173,8 +198,10 @@ export function AdminPanel() {
         type: '',
         categories: [],
         is_public: true,
-        icon: ''
+        icon: '',
+        config: {}
       });
+      setConfigInput('{}');
       
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
@@ -322,6 +349,30 @@ export function AdminPanel() {
             <label htmlFor="is_public" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
               Make this agent public (visible to all users)
             </label>
+          </div>
+          
+          {/* Config JSON Input */}
+          <div>
+            <label htmlFor="config" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Agent Config (JSON)
+            </label>
+            <textarea
+              id="config"
+              name="config"
+              value={configInput}
+              onChange={handleChange}
+              rows={5}
+              placeholder='{\n  "externalUrl": "https://...",\n  "authType": "jwt_query_param",\n  "tokenParam": "token"\n}'
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white font-mono text-sm ${isConfigJsonValid ? 'border-gray-300 dark:border-gray-600' : 'border-red-500 ring-1 ring-red-500'}`}
+            />
+            {!isConfigJsonValid && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+                Invalid JSON format.
+              </p>
+            )}
+            <p className="text-xs text-gray-500 mt-1">
+              Use this for external agents requiring specific config like URLs or auth types.
+            </p>
           </div>
           
           <div className="pt-4">
