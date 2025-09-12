@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-// import Link from 'next/link'; // Removed as unused
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -31,18 +31,20 @@ export function MobileMenu() {
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
         <nav className="flex flex-col gap-4 mt-8">
-          {/* Removed obsolete links. Add back essential mobile navigation if needed. */}
-          {/* Example: Maybe a link back to home? 
           <Link 
             href="/" 
-            className="text-lg font-medium ..."
+            className="text-lg font-medium text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400 transition-colors"
             onClick={() => setOpen(false)}
           >
             Home
           </Link>
-          */}
-          {/* Consider what, if anything, is needed here now the site is single-page */}
-          {/* The user popover handles Dashboard/Agents Library post-login */}
+          <Link 
+            href="/contact" 
+            className="text-lg font-medium text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400 transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            Contact
+          </Link>
         </nav>
       </SheetContent>
     </Sheet>

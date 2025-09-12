@@ -55,8 +55,8 @@ export default function Home() {
       {/* Why Now? Section - Removed */}
       {/* <WhyNow /> */}
       
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white dark:bg-gray-950">
+      {/* Success Stories Section - Commented out */}
+      {/* <section className="py-20 bg-white dark:bg-gray-950">
         <Container>
           <div className="text-center mb-16">
             <div className="inline-flex rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-3 py-1 text-sm font-medium mb-4">
@@ -102,7 +102,7 @@ export default function Home() {
             </div>
           </div>
         </Container>
-      </section>
+      </section> */}
       
       {/* CTA Section - To be replaced with Contact Form */}
       <section className="py-20 bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-900 dark:to-orange-900">
