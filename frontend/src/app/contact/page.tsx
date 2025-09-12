@@ -32,17 +32,19 @@ export default function ContactPage() {
     setIsLoading(true);
 
     try {
-      // EmailJS configuration - replace with your actual service ID, template ID, and public key
+      // EmailJS configuration with your service ID
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'your_service_id',
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'your_template_id',
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_85enctv',
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_contact',
         {
           from_name: formData.name,
           from_email: formData.email,
-          company: formData.company,
-          position: formData.position,
+          company: formData.company || 'Not specified',
+          position: formData.position || 'Not specified',
           message: formData.message,
-          to_email: 'mrpaulphelps@gmail.com'
+          to_name: 'Paul Phelps',
+          to_email: 'mrpaulphelps@gmail.com',
+          reply_to: formData.email
         },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'your_public_key'
       );
@@ -60,7 +62,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <section className="pt-32 pb-20 bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-900 dark:to-orange-900">
+      <section className="pt-44 pb-20 bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-900 dark:to-orange-900">
         <Container>
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-white mb-6">

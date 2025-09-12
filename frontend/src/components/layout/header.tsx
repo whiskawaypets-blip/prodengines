@@ -57,9 +57,9 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm">
-      <Container>
-        <div className="flex h-16 items-center justify-between">
+    <header className="fixed top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm overflow-visible">
+      <Container className="overflow-visible">
+        <div className="flex min-h-24 items-center justify-between py-4 overflow-visible">
           <Logo />
           
           <div className="flex items-center space-x-4">
