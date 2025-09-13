@@ -35,7 +35,7 @@ export default function ContactPage() {
       // EmailJS configuration with your service ID
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_85enctv',
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_contact',
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'pauls_receipt',
         {
           from_name: formData.name,
           from_email: formData.email,

@@ -16,7 +16,7 @@ This guide explains how to set up EmailJS for the contact form to send emails to
 
 1. Go to "Email Templates" in your dashboard
 2. Click "Create New Template"
-3. Set Template ID as: `template_contact`
+3. Set Template ID as: `pauls_receipt`
 4. Use this HTML template:
 
 ### Template Subject:
@@ -27,51 +27,212 @@ New Contact from {{from_name}} - Productivity Engines
 ### Template Body (HTML):
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact - Productivity Engines</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .header { background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; background: #f9fafb; }
-        .info-box { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 10px 0; }
-        .label { font-weight: bold; color: #374151; }
-        .value { color: #6b7280; margin-left: 10px; }
-        .message { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; }
-        .footer { text-align: center; padding: 15px; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #1f2937; 
+            background-color: #f9fafb;
+        }
+        .container { max-width: 600px; margin: 0 auto; background: white; }
+        .header { 
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); 
+            color: white; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+        .header p { font-size: 16px; opacity: 0.9; }
+        .content { padding: 30px 20px; }
+        .greeting { font-size: 18px; color: #374151; margin-bottom: 20px; }
+        .intro { color: #6b7280; margin-bottom: 25px; font-size: 16px; }
+        .contact-card { 
+            background: #f8fafc; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 20px 0; 
+        }
+        .contact-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 8px 0; 
+            border-bottom: 1px solid #e5e7eb; 
+        }
+        .contact-row:last-child { border-bottom: none; }
+        .contact-label { 
+            font-weight: 600; 
+            color: #374151; 
+            min-width: 80px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .contact-value { 
+            color: #1f2937; 
+            font-size: 16px;
+            text-align: right;
+            flex: 1;
+            margin-left: 15px;
+        }
+        .email-highlight { 
+            color: #2563eb; 
+            font-weight: 500; 
+            text-decoration: none; 
+        }
+        .message-section { 
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+            border-left: 5px solid #f59e0b; 
+            border-radius: 8px;
+            padding: 20px; 
+            margin: 25px 0; 
+        }
+        .message-label { 
+            font-weight: 600; 
+            color: #92400e; 
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .message-content { 
+            color: #451a03; 
+            font-size: 16px;
+            line-height: 1.6;
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #f3e8ff;
+        }
+        .next-steps { 
+            background: #f0f9ff; 
+            border: 1px solid #bae6fd; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin: 25px 0; 
+        }
+        .next-steps h3 { 
+            color: #0c4a6e; 
+            margin-bottom: 15px; 
+            font-size: 18px;
+        }
+        .next-steps ul { 
+            list-style: none; 
+            padding: 0; 
+        }
+        .next-steps li { 
+            color: #0369a1; 
+            margin: 8px 0; 
+            padding-left: 20px;
+            position: relative;
+        }
+        .next-steps li:before { 
+            content: "→"; 
+            position: absolute; 
+            left: 0; 
+            color: #0284c7; 
+            font-weight: bold; 
+        }
+        .priority-notice {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #f87171;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .priority-notice strong {
+            color: #dc2626;
+            font-size: 16px;
+        }
+        .footer { 
+            background: #f8fafc; 
+            text-align: center; 
+            padding: 20px; 
+            border-top: 2px solid #e5e7eb; 
+            border-radius: 0 0 8px 8px;
+        }
+        .footer p { 
+            color: #6b7280; 
+            font-size: 14px; 
+            margin: 5px 0; 
+        }
+        .timestamp {
+            color: #9ca3af;
+            font-size: 12px;
+            font-style: italic;
+        }
+        @media (max-width: 600px) {
+            .contact-row { flex-direction: column; align-items: flex-start; }
+            .contact-value { text-align: left; margin-left: 0; margin-top: 5px; }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>New Contact Form Submission</h2>
-        <p>Productivity Engines Website</p>
-    </div>
-    
-    <div class="content">
-        <p>Hello Paul,</p>
-        <p>You have received a new contact form submission from your website:</p>
-        
-        <div class="info-box">
-            <div><span class="label">Name:</span><span class="value">{{from_name}}</span></div>
-            <div><span class="label">Email:</span><span class="value">{{from_email}}</span></div>
-            <div><span class="label">Company:</span><span class="value">{{company}}</span></div>
-            <div><span class="label">Position:</span><span class="value">{{position}}</span></div>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 New Lead Alert!</h1>
+            <p>productivityengines.com contact form</p>
         </div>
         
-        <div class="message">
-            <div class="label">Message:</div>
-            <p>{{message}}</p>
+        <div class="content">
+            <div class="greeting">Hello Paul! 👋</div>
+            <div class="intro">Great news! Someone is interested in Productivity Engines and has reached out through your website contact form.</div>
+            
+            <div class="priority-notice">
+                <strong>⏰ New inquiry - Response recommended within 2 hours for best conversion</strong>
+            </div>
+            
+            <div class="contact-card">
+                <div class="contact-row">
+                    <div class="contact-label">Name:</div>
+                    <div class="contact-value"><strong>{{from_name}}</strong></div>
+                </div>
+                <div class="contact-row">
+                    <div class="contact-label">Email:</div>
+                    <div class="contact-value">
+                        <a href="mailto:{{from_email}}" class="email-highlight">{{from_email}}</a>
+                    </div>
+                </div>
+                <div class="contact-row">
+                    <div class="contact-label">Company:</div>
+                    <div class="contact-value">{{company}}</div>
+                </div>
+                <div class="contact-row">
+                    <div class="contact-label">Position:</div>
+                    <div class="contact-value">{{position}}</div>
+                </div>
+            </div>
+            
+            <div class="message-section">
+                <div class="message-label">💬 Their Message:</div>
+                <div class="message-content">{{message}}</div>
+            </div>
+            
+            <div class="next-steps">
+                <h3>🎯 Recommended Next Steps:</h3>
+                <ul>
+                    <li><strong>Reply directly</strong> to this email (goes to {{from_email}})</li>
+                    <li><strong>Schedule a call</strong> - mention your calendar link</li>
+                    <li><strong>Send a personal follow-up</strong> within 2 hours for best results</li>
+                    <li><strong>Connect on LinkedIn</strong> if they're from a larger company</li>
+                </ul>
+            </div>
         </div>
         
-        <p><strong>Next Steps:</strong></p>
-        <ul>
-            <li>Reply directly to this email (it will go to {{from_email}})</li>
-            <li>Or call/email them using the contact information above</li>
-        </ul>
-    </div>
-    
-    <div class="footer">
-        <p>This message was sent via the Productivity Engines contact form.</p>
-        <p>Reply-to address: {{reply_to}}</p>
+        <div class="footer">
+            <p><strong>📧 Reply-to:</strong> {{reply_to}}</p>
+            <p class="timestamp">Sent automatically from productivityengines.com contact form</p>
+            <p>This email was generated on {{current_date}} at {{current_time}}</p>
+        </div>
     </div>
 </body>
 </html>
@@ -88,7 +249,7 @@ Create a `.env.local` file in the frontend directory with:
 
 ```env
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_85enctv
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_contact
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=pauls_receipt
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key_here
 ```
 
@@ -112,7 +273,7 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key_here
 Set these in Vercel Dashboard > Settings > Environment Variables:
 ```env
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_85enctv
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_contact
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=pauls_receipt
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_actual_public_key_here
 NEXT_PUBLIC_SITE_URL=https://productivityengines.com
 ```
