@@ -70,7 +70,7 @@ export default function ContactPage() {
             </h1>
             <p className="max-w-2xl mx-auto text-xl text-white/90">
               Ready to transform your business with AI-powered automation? 
-              Let's discuss how we can help you achieve your goals.
+              Let&apos;s discuss how we can help you achieve your goals.
             </p>
           </div>
         </Container>

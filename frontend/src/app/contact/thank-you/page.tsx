@@ -33,7 +33,7 @@ export default function ThankYouPage() {
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              We've received your message and will get back to you shortly. 
+              We&apos;ve received your message and will get back to you shortly. 
               Paul typically responds within 24 hours during business days.
             </p>
 
@@ -48,11 +48,11 @@ export default function ThankYouPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
-                  You'll receive a detailed response about how we can help
+                  You&apos;ll receive a detailed response about how we can help
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
-                  We'll schedule a call if your project is a good fit
+                  We&apos;ll schedule a call if your project is a good fit
                 </li>
               </ul>
             </div>
